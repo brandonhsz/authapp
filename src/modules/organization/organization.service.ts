@@ -1,26 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { UpdateOrganizationDto } from './dto/update-organization.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Organization } from './entities/organization.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class OrganizationService {
-  create(createOrganizationDto: CreateOrganizationDto) {
-    return 'This action adds a new organization';
+  constructor(
+    @InjectRepository(Organization)
+    private readonly organizationRepository: Repository<Organization>,
+  ) {}
+  async create(createOrganizationDto: CreateOrganizationDto) {
+    const newOrganization = this.organizationRepository.create(
+      createOrganizationDto,
+    );
+    await this.organizationRepository.save(newOrganization);
+    return 'Organization created successfully';
   }
 
-  findAll() {
-    return `This action returns all organization`;
+  async findAll() {
+    return await this.organizationRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} organization`;
+  async findOne(id: string) {
+    return await this.organizationRepository.findOne({
+      where: { id },
+    });
   }
 
-  update(id: number, updateOrganizationDto: UpdateOrganizationDto) {
-    return `This action updates a #${id} organization`;
+  async update(id: string, updateOrganizationDto: UpdateOrganizationDto) {
+    await this.organizationRepository.update(id, updateOrganizationDto);
+    return `This action updates a ${id} organization`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} organization`;
   }
 }
