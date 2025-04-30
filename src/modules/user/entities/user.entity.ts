@@ -2,8 +2,8 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 import { Organization } from '../../organization/entities/organization.entity';
 
@@ -21,9 +21,7 @@ export class User {
   @Column()
   password: string;
 
-  @ManyToOne(() => Organization, (organization) => organization.id, {
-    nullable: false,
-  })
+  @OneToOne(() => Organization, (organization) => organization.id)
   @JoinColumn({ name: 'organizationId' })
   organization: Organization;
 }
