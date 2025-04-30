@@ -7,7 +7,7 @@ import { loggerConf } from '@/logger';
 import { OrganizationModule } from './modules/organization/organization.module';
 
 import { ConfigModule } from '@nestjs/config';
-import { UserModule } from './modules/user/user/user.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
