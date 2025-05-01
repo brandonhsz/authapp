@@ -1,4 +1,11 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Headers,
+  Get,
+  BadRequestException,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateTenantDto } from './dto/create-tenant.dto';
 import { SignInDto } from './dto/signin.dto';
@@ -15,5 +22,13 @@ export class AuthController {
   @Post('register')
   async register(@Body() createTenantDto: CreateTenantDto) {
     return this.authService.register(createTenantDto);
+  }
+
+  @Get('verify')
+  verify(@Headers('authorization') token: string) {
+    if (!token) {
+      throw new BadRequestException('Authorization header is required');
+    }
+    return this.authService.verify(token);
   }
 }

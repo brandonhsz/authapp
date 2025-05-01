@@ -1,6 +1,5 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import axios, { AxiosInstance } from 'axios';
-import { response } from 'express';
 
 @Injectable()
 export class ApiService {
