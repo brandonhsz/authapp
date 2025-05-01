@@ -1,17 +1,17 @@
+import { ApiModule } from './modules/api/api.module';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { WinstonModule } from 'nest-winston';
 import { loggerConf } from '@/logger';
-import { OrganizationModule } from './modules/organization/organization.module';
 
 import { ConfigModule } from '@nestjs/config';
-import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
-    UserModule,
+    ApiModule,
     ConfigModule.forRoot({}),
     TypeOrmModule.forRoot({
       host: process.env.DB_HOST,
@@ -23,11 +23,11 @@ import { UserModule } from './modules/user/user.module';
       autoLoadEntities: true,
     }),
     JwtModule.register({
-      secret: process.env.JWT_SECRET,
+      secret: `${process.env.JWT_SECRET}`,
       signOptions: { expiresIn: '60s' },
     }),
     WinstonModule.forRoot(loggerConf),
-    OrganizationModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
