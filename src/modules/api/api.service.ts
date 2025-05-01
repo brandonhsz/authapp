@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import axios, { AxiosInstance } from 'axios';
+import { response } from 'express';
 
 @Injectable()
 export class ApiService {
@@ -19,7 +20,10 @@ export class ApiService {
       const response = await this.api.get(endpoint, { params });
       return response.data;
     } catch (error) {
-      throw new Error(`GET request failed: ${error.message}`);
+      throw new HttpException(
+        `GET request failed: ${error.response?.data?.message ?? error.message}`,
+        error.response?.status ?? 500,
+      );
     }
   }
 
@@ -28,7 +32,10 @@ export class ApiService {
       const response = await this.api.post(endpoint, data);
       return response.data;
     } catch (error) {
-      throw new Error(`POST request failed: ${error}`);
+      throw new HttpException(
+        `POST request failed: ${error.response.data.message ?? error.message}`,
+        error.response.status ?? 500,
+      );
     }
   }
 
@@ -37,7 +44,10 @@ export class ApiService {
       const response = await this.api.put(endpoint, data);
       return response.data;
     } catch (error) {
-      throw new Error(`PUT request failed: ${error.message}`);
+      throw new HttpException(
+        `PUT request failed: ${error.response?.data?.message ?? error.message}`,
+        error.response?.status ?? 500,
+      );
     }
   }
 
@@ -46,7 +56,10 @@ export class ApiService {
       const response = await this.api.delete(endpoint);
       return response.data;
     } catch (error) {
-      throw new Error(`DELETE request failed: ${error.message}`);
+      throw new HttpException(
+        `DELETE request failed: ${error.response?.data?.message ?? error.message}`,
+        error.response?.status ?? 500,
+      );
     }
   }
 }
