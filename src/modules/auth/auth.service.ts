@@ -1,10 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTenantDto } from './dto/create-tenant.dto';
 import { ApiService } from '../api/api.service';
+import { SignInDto } from './dto/signin.dto';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly apiService: ApiService) {}
+
+  async login(signInDto: SignInDto) {
+    const session = await this.apiService.post(
+      `/tenants/${process.env.USERFRONT_WORKSPACE_ID}/auth/password`,
+      {
+        emailOrUsername: signInDto.email,
+        password: signInDto.password,
+      },
+    );
+    return session;
+  }
 
   async register(createTenantDto: CreateTenantDto) {
     const { tenantId } = await this.apiService.post(
